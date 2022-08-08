@@ -6,8 +6,11 @@ body
 .page_container
 {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100vw;
+    height: 100vh;
     background-color: rgb(49, 46, 46);
 }
 
@@ -20,7 +23,9 @@ body
 {
     display: flex;
     flex-direction: column;
+    align-items: center;
     background-color: black;
+    padding: 25px;
     width: 300px;
     height: 500px;
 }
@@ -28,21 +33,63 @@ body
 .calculator_screen
 {
     background-color: gray;
+    width: 300px;
+    height: 75px;
 }
 
 .calculator_btns
 {
     display: flex;
-    width: 260px;
+    width: 300px;
     height: 400px;
+    margin-top: 24px;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 12px;
 }
 
 .clear_all,
 .clear,
 .percent,
 .divide,
-.7,
-.8,
-.0,
+.seven,
+.eight,
+.nine,
+.plus,
+.four,
+.five,
+.six,
+.minus,
+.one,
+.two,
+.three,
+.timex,
+.zero,
+.decimal
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: gray;
+    width: 65px;
+    height: 65px;
+}
+
+.equals
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: gray;
+    width: 145px;
+    height: 65px;
+    border-radius: 50px;
+}
+
+p
+{
+    color: white;
+    text-align: center;
+    font-size: 24px;
+}
