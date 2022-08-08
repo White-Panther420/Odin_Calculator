@@ -1,0 +1,48 @@
+body
+{
+    margin: 0;
+}
+
+.page_container
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(49, 46, 46);
+}
+
+.page_title
+{
+    color: red;
+}
+
+.calculator
+{
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    width: 300px;
+    height: 500px;
+}
+
+.calculator_screen
+{
+    background-color: gray;
+}
+
+.calculator_btns
+{
+    display: flex;
+    width: 260px;
+    height: 400px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.clear_all,
+.clear,
+.percent,
+.divide,
+.7,
+.8,
+.0,
