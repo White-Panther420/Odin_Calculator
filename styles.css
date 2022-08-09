@@ -2,6 +2,11 @@ body
 {
     margin: 0;
 }
+@font-face
+{
+    font-family:'digital-clock-font';
+    src: url('./Fonts/Technology.ttf');
+}
 
 .page_container
 {
@@ -16,7 +21,9 @@ body
 
 .page_title
 {
+    font-size: 32px;
     color: red;
+    font-family:'digital-clock-font';
 }
 
 .calculator
@@ -32,9 +39,29 @@ body
 
 .calculator_screen
 {
+    display: flex;
+    flex-direction: column;
     background-color: gray;
-    width: 300px;
-    height: 75px;
+    width: 270px;
+    height: 65px;
+    align-items: flex-end;
+    padding: 12px;
+}
+
+.operations_text,
+.results_text
+{
+    color: rgb(69, 65, 65);
+    text-align: right;
+    margin: 0;
+    font-size: 24px;
+    font-family:'digital-clock-font';
+}
+
+.results_text
+{
+    color: black;
+    margin-top: 18px;
 }
 
 .calculator_btns
@@ -62,7 +89,7 @@ body
 .one,
 .two,
 .three,
-.timex,
+.times,
 .zero,
 .decimal
 {
@@ -73,6 +100,7 @@ body
     background-color: gray;
     width: 65px;
     height: 65px;
+    border: solid black 1px;
 }
 
 .equals
@@ -82,9 +110,37 @@ body
     align-items: center;
     border-radius: 50%;
     background-color: gray;
-    width: 145px;
-    height: 65px;
+    width: 140px;
+    height: 63px;
     border-radius: 50px;
+    border: solid black 2px;
+}
+
+.seven:hover,
+.eight:hover,
+.nine:hover,
+.four:hover,
+.five:hover,
+.six:hover,
+.one:hover,
+.two:hover,
+.three:hover,
+.zero:hover
+{
+    background-color: rgb(207, 204, 204);
+}
+
+.clear_all:hover,
+.clear:hover,
+.percent:hover,
+.divide:hover,
+.plus:hover,
+.minus:hover,
+.times:hover,
+.decimal:hover,
+.equals:hover
+{
+    background-color: red;
 }
 
 p
@@ -92,4 +148,5 @@ p
     color: white;
     text-align: center;
     font-size: 24px;
+    font-weight: 1000;
 }
