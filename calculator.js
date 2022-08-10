@@ -6,7 +6,8 @@ const equals_btn = document.querySelector(".equals");
 let number1 = 0;
 let number2 = 0;
 let operator = " ";
-let operationArray = [];
+let operationChain = ""
+//let operationArray = [];
 /*const clear_all = document.querySelector(".clear_all");
 const clear = document.querySelector(".clear");
 const percent = document.querySelector(".percent");
@@ -30,56 +31,64 @@ const equals = document.querySelector(".equals");
 
 calc_btns.forEach(btn => {
     btn.addEventListener('click', ()=>{
-        //storing all pushed buttons in array to be parsed for operations
-        operationArray.push(btn.innerText)   
-        let operationChain = ""
-        console.log(operationArray);
-        for(let i=0; i<operationArray.length; i++)
-        {
-            operationChain += operationArray[i];
-        }    
+        operationChain += btn.innerText;
         operation.textContent = operationChain;
+        //Array that will contain only the operator symbols
+        let operators = operationChain.replace(/[0-9 ]/g, "");
+        //Array that will only contain the numbers being operated on
+        let operands = operationChain.split(/[-*/%+]+/);  //Regex to split string
+        
+        console.log("OPERATORS: " + operators);
+        console.log("OPERANDS: " + operands);
+        //If we have an array of more than two numbers, then we need to operate 
+        //on the first two, store the result in index 0, remove the number in
+        //index 1 (we don't need it anymore) and update the result screen
+        if(operands.length > 2)
+        {
+            operands[0] = operate(+operands[0], +operands[1], operators[0]);
+            operands.splice(1,1); //Remove the second element from array
+            result.textContent = `${operands[0]}`;
+            console.log("OPERANDS[0]: " + operands[0]);
+            console.log("OPERANDS AGAIN: " + operands);
+        }
     });
 });
 
 equals_btn.addEventListener("click", () => {
-    console.log("HIIII");
-    operate(operationArray)
+    /*    
+    for(let i=0; i<operators.length; i++)
+    {
+        //access operands[j*2] and operands[j*2+1]?
+    }
+    */
 });
 
-function operate(operationArray)
+function operate(num1, num2, operator)
 {
-    for(let i=0; i<operationArray.length; i++)
+    //Go through array and split string by operator?
+    if(operator === "+")
     {
-        //Go through array and split string by operator?
-        if(operationArray[i].typeOf === "number")
-        {
-            num1+=operationArray[i];
-        }
-        if(operationArray[i] === "+")
-        {
-            result.textContent = `${add(num1, num1)}`;
-        }
-        else if(operationArray[i] === "-")
-        {
-            result.textContent = `${subtract(num1, num1)}`;
-        }
-        else if(operationArray[i] === "/")
-        {
-            result.textContent = `${divide(num1, num1)}`;
-        }
-        else if(operationArray[i] === "*")
-        {
-            result.textContent = `${multiply(num1, num1)}`;
-        }
-        else if(operationArray[i] === "%")
-        {
-            result.textContent = `${modulous(num1, num1)}`;
-        }
-        else
-        {
-            return 0;
-        }
+        return add(num1, num2);
+    }
+    else if(operator === "-")
+    {
+        return subtract(num1, num2);
+    }
+    else if(operator === "/")
+    {
+        return divide(num1, num2);
+    }
+    else if(operator === "*")
+    {
+        return multiply(num1, num2);
+    }
+    else if(operator === "%")
+    {
+        return add(num1, num2);
+    }
+    else
+    {
+        return 0;
     }
 }
 
