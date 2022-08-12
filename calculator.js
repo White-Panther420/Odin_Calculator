@@ -33,34 +33,36 @@ calc_btns.forEach(btn => {
     btn.addEventListener('click', ()=>{
         operationChain += btn.innerText;
         operation.textContent = operationChain;
+        operationChain.trim();  //Clear all whitespace form string
+        console.log("OPERATION CHAIN: " + operationChain);
         //Array that will contain only the operator symbols
-        let operators = operationChain.replace(/[0-9 ]/g, "");
+        let operators = operationChain.replace(/[0-9]/g, "").split("");
         //Array that will only contain the numbers being operated on
-        let operands = operationChain.split(/[-*/%+]+/);  //Regex to split string
-        
-        console.log("OPERATORS: " + operators);
-        console.log("OPERANDS: " + operands);
+        const operands = operationChain.split(/[\+\/\*\-]/g).filter(n => !!n); //Checking if string has length > 0 then splitting it on operators   
+        console.log("1OPERATORS: " + operators);
+        console.log("1OPERANDS: " + operands);
+        console.log("LENGTH: " + operands.length);
         //If we have an array of more than two numbers, then we need to operate 
         //on the first two, store the result in index 0, remove the number in
         //index 1 (we don't need it anymore) and update the result screen
-        if(operands.length > 2)
+        if(operands.length >= 2 && operators.length === operands.length)
         {
             operands[0] = operate(+operands[0], +operands[1], operators[0]);
             operands.splice(1,1); //Remove the second element from array
+            operators.splice(0,1)
             result.textContent = `${operands[0]}`;
             console.log("OPERANDS[0]: " + operands[0]);
             console.log("OPERANDS AGAIN: " + operands);
+            console.log("OPERATORS AGAIN: " + operators);
         }
     });
 });
 
 equals_btn.addEventListener("click", () => {
-    /*    
-    for(let i=0; i<operators.length; i++)
-    {
-        //access operands[j*2] and operands[j*2+1]?
-    }
-    */
+    operands[0] = operate(+operands[0], +operands[1], operators[0]);
+    operands.splice(1,1); //Remove the second element from array
+    operators.splice(0,1)
+    result.textContent = `${operands[0]}`;
 });
 
 function operate(num1, num2, operator)
