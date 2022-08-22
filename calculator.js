@@ -2,84 +2,99 @@ const screen = document.querySelector(".calculator_screen");
 let operationText = document.querySelector(".operations_text");
 const result = document.querySelector(".results_text");
 const calc_btns = document.querySelectorAll("button");
-let operators = "";
-let operands = "";
-let operationChain = "";
+let operators = "";  //Array to store operators
+let operands = "";  //Array to store numbers
+let operationChain = ""; //String of operations entered by user
 
 
-operationText.addEventListener("input", function(e) {
-    e.target.value.replace(" ", "");
-    operationChain = e.target.value;
-    operators = operationChain.replace(/[0-9\s]/g, "").split("");
-    operands = operationChain.split(/[\+\/\*\-%\s]/g).filter(n => !!n); //Checking if string has length > 0 then splitting it on operators 
-    console.log(operationChain);
-    console.log(operators);
-    console.log(operands);
+operationText.addEventListener("keydown", function(e) {
+    operationChain = e.target.value; //Set op chain to input value
+    operators = operationChain.replace(/[0-9.n\s]/g, "").split(""); //Spliting chain on numbers
+    if(e.key === "Enter" || operators.length > 1)
+    {
+        calc_btns[18].click();
+    }
 });
 
 calc_btns.forEach(btn => {
     if(btn.className === "equals")
     {
         btn.addEventListener("click", () => {
-            console.log("HIIII");
-            if(operators.length >= operands.length)  //Ensure user doesn't end operation chain with an operator
+            //Take chain of operations and sort it into two arrays
+            operators = operationChain.replace(/[0-9.n\s]/g, "").split(""); //Spliting chain on numbers
+            operands = operationChain.split(/[\+\/\*\-%\s]/g).filter(n => !!n); //Checking if string has length > 0 then splitting it on operators 
+
+            for(let i=0; i<operands.length; i++) //Checking for "n" so we can change sign of numbers that came after
+            //the +/- button was pressed
             {
-                result.textContent = "Math Error!";
+                if(operands[i].includes("n"))
+                {
+                    operands[i] = operands[i].replace("n", "-");
+                }
             }
-            else if(operators.length === 0 && operands.length === 1)  //Only one digit is entered
+            if(operators.length === 0 && operands.length === 1)  //Only one digit is entered
             {
+                console.log("UOOOOOOOOOEWDW");
                 result.textContent = operands[0];
             }
             else
             {
-                //While loop ensures that an operation chain is performed with two numbers at a time
-                //until the operand array has one element remaining (the final result)
-                while(operands.length > 1)
+                operands[0] = Math.round(operate(+operands[0], +operands[1], operators[0]) * 1000000000) / 1000000000;
+                operands.splice(1,1); //Remove the second element from array
+                operators.shift(); 
+                console.log(operators);
+                console.log(operands);
+                
+                if(isNaN(operands[0]))
                 {
-                    operands[0] = Math.round(operate(+operands[0], +operands[1], operators[0]) * 1000000000) / 1000000000;
-                    operands.splice(1,1); //Remove the second element from array
-                    operators.shift(); 
-                    if(isNaN(operands[0]))
-                    {
-                        result.textContent = "You can't do that dummy!";
-                    }
-                    else
-                    {
-                        result.textContent = `${operands[0]}`;
-                    }
+                    result.textContent = "You can't do that dummy!";
+                }
+                else
+                {
+                    operationText.value =  `${operands[0]}${operators[0]}`;
+                    operationChain = operationText.value;
+                    result.textContent = `${operands[0]}`;
                 }
             }
         });
     }
-    /*
     else if(btn.className === "sign")
     {
-
+        btn.addEventListener("click" , () => {
+            if(operationChain[operationChain.length-1] !== "n")
+            {
+                operationChain += "n";  //Using n because we already split on the "-"
+                operationText.value += "(-)"; //Displaying the sign change
+            }
+            else
+            {
+                operationChain = operationChain.replace(/.$/, '');  //Turning the number back into a positie by removing the "n"
+                operationText.value = operationText.value.replace(/.$/, '');
+            }
+        });
     }
-    */
     else if(btn.className === "decimal")
     {
         btn.addEventListener("click", () => {   
+            //Update array so an attempt at entering duplicate decimals can be catched
+            //when event fires again 
+            operands = operationChain.split(/[\+\/\*\-%\s]/g).filter(n => !!n);
             //Check if user has not used the decimal for the current number
             if(!operands[operands.length-1].includes("."))
             {
                 operationChain += btn.innerText;  
-                //Update array so an attempt at entering duplicate decimals can be catched
-                //when event fires again 
-                operands = operationChain.split(/[\+\/\*\-%]/g).filter(n => !!n);        
+                operationText.value += btn.innerText;
             }
             else
             {
                 operationChain+=""; //Add nothing if user has already used decimal
+                operationText.value += "";
             }
-            operationText.textContent = operationChain;
         });
     }
     else if(btn.className === "clear_all")
     {
         btn.addEventListener("click", () => {
-            operands.splice(0, operands.length);
-            operators.splice(0, operators.length);
             operationChain = "";
             result.textContent = "0";
             operationText.value = "";
@@ -91,9 +106,6 @@ calc_btns.forEach(btn => {
             //Remove last char and update both arrays to make sure the correct element is removed
             operationChain = operationChain.slice(0, -1); //Remove last char 
             operationText.value = operationText.value.slice(0, -1); 
-            operators = operationChain.replace(/[0-9.]/g, "").split("");
-            operands = operationChain.split(/[\+\/\*\-%]/g).filter(n => !!n); 
-            operationText.textContent = operationChain;
         });
     }
     else //All other btns
@@ -101,11 +113,12 @@ calc_btns.forEach(btn => {
         btn.addEventListener('click', ()=>{
             operationChain += btn.innerText;
             operationText.value += btn.innerText;
-            operationText.textContent = operationChain;
-            //Array that will contain only the operator symbols
-            operators = operationChain.replace(/[0-9.]/g, "").split("");
-            //Array that will only contain the numbers being operated on
-            operands = operationChain.split(/[\+\/\*\-%]/g).filter(n => !!n); //Checking if string has length > 0 then splitting it on operators 
+            operators = operationChain.replace(/[0-9.n\s]/g, "").split(""); //Spliting chain on numbers
+
+            if(operators.length > 1)
+            {
+                calc_btns[18].click();  //Click the equals btn
+            }
         });
     }
 });
