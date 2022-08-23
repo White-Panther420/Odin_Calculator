@@ -34,7 +34,6 @@ calc_btns.forEach(btn => {
             }
             if(operators.length === 0 && operands.length === 1)  //Only one digit is entered
             {
-                console.log("UOOOOOOOOOEWDW");
                 result.textContent = operands[0];
             }
             else
@@ -42,8 +41,6 @@ calc_btns.forEach(btn => {
                 operands[0] = Math.round(operate(+operands[0], +operands[1], operators[0]) * 1000000000) / 1000000000;
                 operands.splice(1,1); //Remove the second element from array
                 operators.shift(); 
-                console.log(operators);
-                console.log(operands);
                 
                 if(isNaN(operands[0]))
                 {
@@ -51,7 +48,14 @@ calc_btns.forEach(btn => {
                 }
                 else
                 {
-                    operationText.value =  `${operands[0]}${operators[0]}`;
+                    if(operators.length === 0)
+                    {
+                        operationText.value =  `${operands[0]}`;
+                    }
+                    else
+                    {
+                        operationText.value =  `${operands[0]}${operators[0]}`;
+                    }
                     operationChain = operationText.value;
                     result.textContent = `${operands[0]}`;
                 }
